@@ -1,0 +1,64 @@
+﻿@model List<HistoryDetail>
+
+<table class="table-borderless  historyview table-responsive-lg" style="width:-webkit-fill-available;background-color:transparent;">
+   <thead>
+       <tr>
+           </tr>
+       <tr>
+           <th>
+               #
+           </th>
+           <th>
+               Property Name
+           </th>
+           <th>
+               Old Value
+           </th>
+           <th>
+               New Value
+           </th>
+           <th>
+               Comment
+           </th>
+
+           <th>
+               Updated By
+           </th>
+           <th>
+               Updated Time
+           </th>
+       </tr>
+       </thead>
+    @{int i = 1;}
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>
+        @i
+        @{i++;}
+    </td>
+    <td>
+        @item.PropertyName
+    </td>
+    <td>
+        @item.OldValue
+    </td>
+    <td>
+        @item.NewValue
+    </td>
+    <td>
+        @item.Comment
+    </td>
+    <td>
+        @item.UpdatedBy
+    </td>
+    <td>
+        @item.UpdateTime
+    </td>
+
+
+
+</tr>
+}
+
+    </table>

@@ -1,0 +1,75 @@
+﻿@inject IDeviceResolver device
+@model List<TimesheetBreakDown>
+@{
+    ViewData["Title"] = "Time Sheet Break Down";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+     var bottom = "0";
+    var height="82%";
+    var bottomforomment="7%";
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "81%";
+        bottom = "2%";
+        bottomforomment = "9%";
+    }
+}
+
+@{
+    var op = new List<Operation>();
+    @if (!HttpContextAccessor.HttpContext.User.IsInRole("User")) {
+            op.Add(new Operation { Name = "Edit", Url = "", IsRedirect = false, buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-pencil-alt ml-1" });
+        }
+
+    }
+@if (device.Device.Type == DeviceType.Mobile)
+{
+    <header>
+        <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
+
+            <div class="d-inline-flex w-100">
+                <a style="color:white" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                <div class="container-block justify-content-center">
+                    <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">
+                        Time Sheet Break Down
+                    </span>
+                </div>
+            </div>
+        </nav>
+    </header>
+}
+else
+{
+    <div>
+        <a href="javascript:history.back()">Back</a>
+    </div>
+}
+<form asp-action="SaveEffort" method="post" asp-controller="User" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded">
+    <div @if (device.Device.Type == DeviceType.Mobile) { <text> style="margin-top:67px" </text> }>
+        @Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped dynamicTable table_container table-responsive-lg", "", "", true, op)
+    </div>
+    <hr />
+    @if (!HttpContextAccessor.HttpContext.User.IsInRole("User"))
+    {
+        if (device.Device.Type == DeviceType.Mobile)
+        {
+            <div class="bottom-stick" style="padding-bottom:@bottom">
+                <input type="submit" class="btn btn-success" value="Submit" style="color:white;width: 75px;margin: 10px;">
+            </div>
+        }
+        else
+        {
+            <input type="submit" class="btn btn-success" value="Submit" style="color:white;width: 75px;margin: 10px;">
+        }
+
+    }
+</form>
+
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+    </script>
+}

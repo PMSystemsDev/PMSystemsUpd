@@ -1,0 +1,437 @@
+﻿@model Presentation.ViewModels.WorkOrderDetail
+@{
+    ViewData["Title"] = "WO Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var bottom = "0";
+    //var height="82%";
+    
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+       // height = "81%";
+        bottom = "2%";
+       
+    }
+}
+
+
+@if (Model != null)
+{
+
+    <header>
+        <nav class="navbar bg-white mb-3 fixed-top">
+
+            <div class="d-inline-flex w-100">
+                    <a style="color:black" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <div class="container-block justify-content-center">
+                        <span class="nav-link justify-content-end" style="color:black;font-size:1.5em;">
+                            Work Order
+                           <b><u>@Model.Id</u></b>
+                        </span>
+                    </div>
+            </div>
+        </nav>
+    </header>
+    <div class="mform" style="bottom:@bottom">
+
+        <table class="table border-0 table-striped ">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                </tr>
+                <tr>
+
+                    <td>
+                        <div class="d-md-inline-flex myview">
+                            <div>
+                                <div>
+                                    <h2>@Model.PropertyName</h2>
+                                    <img src="~/hotel.svg" width="25" height="35"><strong style="color:grey">@Model.SubLocation in @Model.Location</strong><br />
+                                    <strong style="color:grey">@Model.Item @Model.Issue</strong><br><br>
+                                    <p>Assigned to: <strong class="text-success">@Model.AssignedTo</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>
+                        Status Details
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+
+                        <div class="row">
+                            <div class="col d-inline">
+                                <label asp-for="StatusDescription"></label>
+                                <span class="value"> @Html.DisplayFor(x => x.StatusDescription)</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col d-inline">
+                                <label asp-for="Priority"></label>
+                                @if (Model.Priority == 0)
+                                {
+                                    <span class="value">Critical</span>
+                                }
+                                else if (Model.Priority == 1)
+                                {
+                                    <span class="value">High</span>
+                                }
+                                else if (Model.Priority == 2)
+                                {
+                                    <span class="value">Medium</span>
+                                }
+                                else if (Model.Priority == 3)
+                                {
+                                    <span class="value">Low</span>
+                                }
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                @if (!Model.Recurring)
+                {
+                    <tr>
+                        <th>
+                            Update Status
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="flex-sm-row">
+
+                                <form asp-action="WorkOrderStatusChange" id="editwo" asp-controller="WorkOrder">
+                                    @if (!Model.Recurring)
+                                    {
+                                        <div style="display:grid">
+
+                                            <select class="form-control form-control" asp-for="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "PropertyName"))" required>
+                                                <option value="">Select Status</option>
+                                            </select>
+                                            <div class="form-group top-buffer">
+                                                <label>Add Status Description</label>
+                                                <textarea class="form-control" asp-for="StatusChangeComment"></textarea>
+                                            </div>
+                                            <input asp-for="Id" hidden>
+
+
+                                        </div>
+                                    }
+                                    @if (Model.Attachment != null)
+                                    {
+                                        <div class="top-buffer">
+                                            @Html.DisplayImage(Model.Attachment)
+
+                                        </div>
+                                    }
+                                    <div class=" top-buffer mt-5">
+                                        <div class="cont">
+                                            <label class="browsebutton">Add Photo</label>
+                                            <input asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                            
+                                        </div>
+                                        <div id="file_selected">
+                                        </div>
+                                        <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
+                                    </div>
+                                    @*<p class="text-danger">Photo uploads are not added until work order is saved.</p>*@
+                                    <input type="text" asp-for="FilesRemoved" hidden>
+                                    <input type="submit" hidden value="Update" id="dohidden" class="btn btn btn-primary ">
+                                    <button type="reset" hidden id="dohiddenreset" class="btn btn btn-primary "></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <th>
+                        WO Information
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+
+                        <div class="row ">
+                            <div class="col d-inline">
+                                <label asp-for="Issue"></label>
+                                <span class="value"> @Html.DisplayFor(x => x.Issue)</span>
+                            </div>
+
+                        </div>
+                        <div class="row ">
+                            <div class="col d-inline">
+                                <label asp-for="Item"></label>
+                                <span class="value">@Html.DisplayFor(x => x.Item)</span>
+                            </div>
+
+                        </div>
+                        <div class="row ">
+                            <div class="col d-inline">
+                                <label asp-for="Requestedby"></label>
+                                @if (!string.IsNullOrEmpty(Model.ParentWOId))
+                                {
+                                    <a asp-action="GetWODetail" asp-controller="Workorder" asp-route-id="@Model.ParentWOId" asp-route-type="2">@Model.Requestedby</a>
+                                }
+                                else
+                                {
+                                    <span class="value"> @Html.DisplayFor(x => x.Requestedby)</span>
+                                }
+                                </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col">
+                                <label asp-for="CreatedTime"></label>
+                                <span class="value"> @Html.DisplayFor(x => x.CreatedTime)</span>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col">
+                                <label>Description</label>
+                                <span class="value"> @Html.DisplayFor(x => x.Description)</span>
+                            </div>
+
+                        </div>
+                        <div class="row ">
+                            <div class="col">
+                                <label asp-for="DueDate"></label>
+                                <span class="value"> @Html.DisplayFor(x => x.DueDate)</span>
+                            </div>
+
+                        </div>
+                      
+
+                    </td>
+                </tr>
+                @if (Model.Recurring)
+                {
+                    <tr>
+                        <th>
+                            Schedule Details
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+
+
+                            @if (Model.RecurringStartDate.HasValue)
+                            {
+                                <div class="row">
+                                    <div class="col">
+                                        <label asp-for="RecurringStartDate">Schedule Start Date</label>
+                                        <span class="value">@Html.DisplayFor(x => x.RecurringStartDate.Value)</span>
+                                    </div>
+
+                                </div>
+                            }
+                            @if (Model.EndAfterCount.HasValue)
+                            {
+                                <div class="row ">
+                                    <div class="col">
+                                        <label asp-for="EndAfterCount">End After Count</label>
+                                        <span class="value">@Html.DisplayFor(x => x.EndAfterCount.Value)</span>
+                                    </div>
+
+                                </div>
+                            }
+
+                            <div class="row">
+                                <div class="col">
+                                    <label asp-for="CronExpression">Schedule</label>
+                                    <span class="value" style="color:green"><strong>@Html.DisplayFor(x => x.CronExpression)</strong></span>
+                                </div>
+                            </div>
+                            @if (Model.RecurringEndDate.HasValue)
+                            {
+                                <div class="row ">
+                                    <div class="col">
+                                        <label asp-for="RecurringEndDate">Schedule End Date</label>
+                                        <span class="value"> @Html.DisplayFor(x => x.RecurringEndDate.Value)</span>
+                                    </div>
+
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <th>
+                        Updated Infomation
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="UpdatedBy">Last Updated By</label>
+                                <span class="value"> @Html.DisplayFor(x => x.UpdatedBy)</span>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="UpdatedTime">Last Update Time</label>
+                                <span class="value"> @Html.DisplayFor(x => x.UpdatedTime)</span>
+                            </div>
+
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Assigned Info
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col d-inline">
+                                <label for="AsignedTo">Vendor</label>
+                                <span class="text-info">@Model.Vendor</span>
+                            </div>
+
+                        </div>
+
+                    </td>
+                </tr>
+                @if (!Model.Recurring)
+
+                {
+                    <tr>
+                        <td>
+
+                            <a title="history" href="@Url.Action("GetHistory", new { entity = "workorder", rowId = Model.Id })"><i class="fa fa-history fa-2x"></i></a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <th>
+                       Comments
+                    </th>
+                </tr>
+
+                <tr id="CommentSection">
+                    <td>
+                        @await Html.PartialAsync("CommentOperation",
+Model.Comments,
+new ViewDataDictionary(ViewData)
+      {
+                        { "workOrderId", Model.Id }
+      })
+                    </td>
+                </tr>
+
+                @if (Model.Recurring)
+
+                {
+                    <tr>
+                        <th>
+                            Child WO
+                        </th>
+                    </tr>
+                    <tr>
+                        <td id="ChildWOSection">
+                        </td>
+                    </tr>
+                }
+                
+            </tbody>
+        </table>
+
+    </div>
+    <div style="height: 50px;
+    display: block;
+    width: 100%;"></div>
+    <div class="bottom-section" style="padding-bottom:@bottom">
+        <div class="pop-up justify-content-center" style="display:none">
+            <div class="">
+                @{Dictionary<string, string>
+                      keyValuePairs = new Dictionary<string, string>
+                          ();
+                    keyValuePairs.Add("id", Model.Id + "");};
+                <input type="button" value="Order Request" class="btn btn-lg btn-light top-buffer w-100">
+                @if (!Model.StatusDescription.Equals("Complete"))
+                {
+                    if (!Model.Recurring)
+                    {
+                        <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='Edit'></auth-link>
+                    }
+                    else
+                    {
+                        <auth-link bclass="btn btn-lg btn-light top-buffer w-100" feature=@MenuEnum.Recurring_WO routedata=@keyValuePairs action="EditRecurringWOView" controller="WorkOrder" content='Edit'></auth-link>
+                    }
+                }
+
+                <input type="button" id="Cancel" value="Cancel" class="btn btn-lg btn-dark top-buffer w-100" style="margin-bottom:10px;">
+            </div>
+        </div>
+
+        <form class="comment-stick w-100 form-inline" style="margin-block-end:0px;" id="commentpost" parent=".commentsection"  asp-action='PostComment' asp-controller="WorkOrder" method='post'>
+            <input type='text' id='WorkOrderId' name='WorkOrderId' value='@Model.Id' hidden />
+            <table width="100%">
+                <tr width="90%">
+                    <td>
+                        <input type="text" id='Comment' name='Comment' class="form-control form-control-lg w-100" placeholder="write a note or comment">
+                    </td>
+                    <td width="10%">
+                        <input type="submit"  id="sub" class="btn btn-lg btn-primary" value="Post">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div class="bottom-stick">
+            <div class="nav-link d-inline-flex flex-row">
+                <input type="button" class="btn  btn-success submit" value="Save" onclick="document.getElementById('dohidden').click();" style="color:white;width: 75px;">
+                <input type="button" onclick="cancelFunction();" class="btn  btn-danger submit ml-1" value="Cancel" style="color:white;width: 75px;">
+                @if (HttpContextAccessor.HttpContext.User.Claims.First(x => x.Type == "IsEffortVisible").Value == "True")
+                {
+                    <a asp-action="AddEffort" asp-route-id="@Model.Id" class="btn  btn-info submit ml-1" style="color:white;width: 75px;"> Hours</a>
+                }
+                <auth-link bclass="btn btn-primary ml-1" feature=@MenuEnum.Edit_WO routedata=@keyValuePairs action="EditWOView" controller="WorkOrder" content='Edit Issue'></auth-link>
+            </div>
+                    
+            </div>
+    </div>
+}
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+     alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+    </script>
+}
+<style>
+    .customdisp {
+        display: flex;
+        flex-flow: wrap;
+    }
+</style>
+<script>
+     var workorderId = '@Model.Id';
+    $(document).ready(function () {
+
+            $.get('@Url.Action("GetChildWO","WorkOrder")' + '?rwoId=' + workorderId + '&search=',
+                function (data) {
+                    if (data != null || data != undefined) {
+                        $('#ChildWOSection').append(data);
+                    }
+                });
+
+
+    });
+    function cancelFunction() {
+        alertify.confirm('Cancelling will lose any changes, are you sure?', function () { window.history.back();}).set({ title: "Alert" });
+        
+
+    }
+  
+</script>

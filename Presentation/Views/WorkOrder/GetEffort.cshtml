@@ -1,0 +1,44 @@
+﻿@if (ViewBag.type == 2)
+{
+
+    ViewData["Title"] = "WO Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@model Presentation.ViewModels.EffortPagination
+
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Day
+        </dt>
+        <dd class="col-sm-10">
+            Date
+        </dd>
+        <dt class="col-sm-2">
+           Effort
+        </dt>
+        
+    </dl>
+    <table class="table table-responsive-sm">
+        <tbody>
+            <tr>
+                @{ if (Model != null)
+                    {
+                        foreach (var item in Model.EffortDTOs)
+                        {
+                        <td>
+                            <h4>@item.DateTime.DayOfWeek</h4>
+                            <span> @item.DateTime.Date</span>
+                            <span> @item.Repair</span>
+                        </td>
+                            }
+                        }
+                    }
+            </tr>
+        </tbody>
+    </table>
+</div>
+

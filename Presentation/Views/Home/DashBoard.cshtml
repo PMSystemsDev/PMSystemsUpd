@@ -1,0 +1,43 @@
+﻿@model Presentation.ViewModels.Controller.Home.DashBoard
+    @{
+        ViewData["Title"] = "DashBoard";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <div class="workordertitle">Dashboard
+    @if (Model.Properties.Any())
+    {
+        <ul style="list-style:none;display:inline-flex;grid-gap:5px;margin-bottom:0px">
+            
+            <li>
+            <i class="fa fa-home"></i>
+                </li>
+           
+        </ul>
+    }
+    </div>
+    <select class="form-control form-control-sm  mt-1" id="Property"  asp-items="@(new SelectList(Model.Properties, "Id", "PropertyName","Selected"))" style="width:100px;">
+    </select>
+<hr/>
+ <div id="param">
+     @{await Html.RenderPartialAsync("DashboardRoomView.cshtml", Model.Locations);
+     }
+     </div>
+<script>
+
+    //on change of property load loctions;
+    $(document).ready(function () {
+        $('#Property').change(function () {
+
+            enablespiner("Loading...")
+            //retrieve locations
+            $.get('/Home/Locations?Id='+$('#Property').val(), function (res) {
+                $('#param').html(res);
+                disablespinner();
+            })
+
+            
+        });
+    });
+   
+</script>

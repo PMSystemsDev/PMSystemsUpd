@@ -1,0 +1,129 @@
+﻿@model PropertyConfig
+@{
+    ViewData["Title"] = "Property Config";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table_container">
+    <div class="workordertitle">
+        Property Configuration
+    </div>
+    <div style="text-align:center;font-weight:bold">@Model.Name</div>
+    <form asp-action="PropertyConfig" class="addconfig">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>
+
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                </div><div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" onclick="ShowNewLocation();" type="checkbox" value="true" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            New Location
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            @if (Model.Locations != null && Model.Locations.Any())
+                            {
+                                <div class="row top-buffer" id="available-location">
+                                    <div class="col-md-3">
+                                        <label for="Locations">Location Available</label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                            <option value=""> Select Location</option>
+                                        </select>
+                                        <span asp-validation-for="LocationId" class="text-danger"></span>
+                                        <div><input type="button" class="btm btn-sm btn-danger mt-1" value="Delete" onclick="deleteProp()"></div>
+
+                                    </div>
+
+                                </div>
+                            }
+
+                            <div class="row top-buffer" id="new-location" style="display:none;">
+                                <div class="col-md-3">
+                                    <label for="NewLocation">New Location</label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="NewLocation" class="form-control form-control-sm custom-input">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label asp-for="SubLocation"></label>
+                                </div>
+                                <div class="col">
+                                    <textarea asp-for="SubLocation" rows="8" cols="8" class="form-control form-control-sm custom-input"></textarea>
+                                    <span class="text-danger">Enter sub locations separated by a comma.</span><br />
+                                    <span class="text-info">Sub Location will come prepopulated if available to corresponding location</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label>Asset Manager</label>
+                                </div>
+                                <div class="col">
+                                    <a href="/property/AssetManager" >Click here</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <input asp-for="PropertyId" hidden>
+                        <input class="btn btn-sm btn-primary" type="submit" value="submit">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<div>
+    <a href="javascript:history.back()">Back</a>
+</div>
+<script>
+    $('#LocationId').change(function () {
+          $.get('@Url.Action("GetPropertyData","Property")' + "?id=" + $(this).val(),
+                function (data) {
+                    if (data != null || data != undefined) {
+                        $("#SubLocation").val(data)
+                    }
+                });
+    })
+    $("#SubLocation").change(function (e) {
+        if ($(this).val().indexOf(',') == $(this).val().length - 1) {
+            alert("Please remove ',' from the end of the Sub-Locations");
+            $("input[type='submit']").prop("disabled", true);
+        }
+        else {
+            $("input[type='submit']").prop("disabled", false);
+        }
+    })
+</script>
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+    </script>
+}

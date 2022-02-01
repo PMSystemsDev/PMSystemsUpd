@@ -1,0 +1,46 @@
+﻿@inject IDeviceResolver device
+@model List<TimeSheet>
+@{
+    ViewData["Title"] = "Time Sheet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var op = new List<Operation>();
+    op.Add(new Operation { Name = "Detail",IsRedirect=true, Url = Url.Action("GetTimeSheetBreakDown"), buttonClass = "btn btn-sm btn-info", IconClass = "fa fa-info ml-1" });
+
+}
+@if (device.Device.Type == DeviceType.Mobile)
+{
+    <header>
+        <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
+
+            <div class="d-inline-flex w-100">
+                <a style="color:white" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                <div class="container-block justify-content-center">
+                    <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">
+                        Time Sheet
+                    </span>
+                </div>
+            </div>
+        </nav>
+    </header>
+}
+else
+{
+    <div>
+        <a href="javascript:history.back()">Back</a>
+    </div>
+}
+<div @if (device.Device.Type == DeviceType.Mobile) {<text>style="margin-top:67px"</text>}>
+    @Html.BuildTable(Model, "Time Sheet", "workordertitle", "table table-striped dynamicTable table_container table-responsive-lg", "", "", true, op)
+</div>
+
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+    </script>
+}

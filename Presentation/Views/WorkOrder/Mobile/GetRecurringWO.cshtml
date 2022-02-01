@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewData["Title"] = "Recurring Work Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model WOFilterModel
+@{ var ResponseModel = ViewBag.Response as Pagination<List<RecurringWOs>>;
+    var bottom = "0";
+    var height = "88%";
+    var context = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "85%";
+        bottom = "2%";
+    }
+}
+@{ var param = Model.GetType()
+             .GetProperties()
+             .ToDictionary(prop => prop.Name, prop => prop.GetValue(Model) != null ? prop.GetValue(Model).ToString() : "");
+}
+<header>
+    <nav class="navbar navbar-dark bg-success border-bottom box-shadow mb-3 fixed-top">
+        <div class="container-fluid">
+            <ul class="navbar-nav justify-content-start" style="flex-direction:row;">
+                <li class="nav-item" style="margin-right:5px;">
+                    <div class="Filter_con float-right">
+                        <input asp-for="FilterActive" class="filter_check" title="Filter" style="color:white;padding:5px;">
+                        <i class="fa fa-filter fa-1x" title="Filter" style="color:white"></i>
+                    </div>
+                </li>
+                @*<li class="nav-item">
+                        <a asp-action="ExportRecurringWO" class="filter float-right" title="Export" style="color:white;padding:5px" asp-all-route-data="@param" download="Wolist"><i class="fas fa-file-export fa-1x"></i></a>
+                    </li>*@
+            </ul>
+            <a class="navbar-brand justify-content-center" asp-controller="WorkOrder" asp-action="Index">Recurring Work Order</a>
+            <ul class="navbar-nav justify-content-end" style="flex-direction:row;">
+                <li class="nav-item" style="margin-right:5px;">
+                    <a class="nav-link text-white" asp-controller="Login" asp-action="Mobile"><i class="fa fa-bars fa-1x" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<form class="mform" style="height:@height">
+
+    <div class="card mwofilter" style="@if(!Model.FilterActive){<text>display:none;</text>}">
+        <div class="card-body">
+            <div class="card-title float-right"><a href="#" class="closefilter"><i class="fa fa-times fa-2x"></i></a></div>
+            <input asp-for="TermSearch" placeholder="Search all fields" class="form-control top-buffer form-control mobile-input">
+            <input asp-for="WOId" placeholder="Search WO Number" class="form-control top-buffer form-control mobile-input">
+
+            <input asp-for="AssignedTo" placeholder="Search by Assigned To" class="form-control top-buffer form-control mobile-input">
+
+            <input asp-for="PropertyName" placeholder="Search by Property Name" class="form-control top-buffer form-control mobile-input">
+
+
+            <select asp-for="Priority" type="date" class="form-control top-buffer form-control mobile-input">
+                <option value="">Filter by Priority</option>
+                <option value="0">Critical</option>
+                <option value="1">High</option>
+                <option value="2">Medium</option>
+                <option value="3">Low</option>
+            </select>
+            <select asp-for="Status" class="form-control form-control top-buffer mobile-input">
+                <option value="">Filter by Status</option>
+                <option value="ADCM">Add Comment Only</option>
+                <option value="BINE">Bid Needed</option>
+                <option value="BIRE">Bid Received</option>
+                <option value="BIRQ">Bid Requested</option>
+                <option value="COMP">Complete</option>
+                <option value="COBQ">Complete But Bad Quality</option>
+                <option value="CONI">Complete, Need Inspection</option>
+                <option value="DAIL">Daily</option>
+                <option value="FISC">Finalize Scope</option>
+                <option value="HOLD">Hold</option>
+                <option value="NEWO">New work order</option>
+                <option value="ORMA">Order Materials</option>
+                <option value="PEND">Pending</option>
+                <option value="REAS">Ready To Assign</option>
+                <option value="WOAS">Work Assigned</option>
+                <option value="WOPR">Work In Progress</option>
+                <option value="WOOR">Work Ordered</option>
+            </select>
+            <input asp-for="Vendor" placeholder="Search by Vendor" class="form-control top-buffer form-control mobile-input">
+
+        </div>
+        <div class="d-lg-inline-flex" style="padding:0 0 10px 10px;">
+            <input type="submit" value="Filter" class="btn btn-sm btn-primary top-buffer">
+            &nbsp;<input type="reset" value="Reset" class="btn btn-sm btn-danger top-buffer">
+        </div>
+    </div>
+    <div class="container">
+        @*<div class="d-inline-flex due-date w-100 justify-content-center ">
+                <span class="datedec" style="padding-left:15px;"><i class="fa fa-chevron-left fa-1x"></i></span>
+                <div class="date-con" style="padding-left:15px;">
+                    <span class="fa fa-calendar fa-1x"></span>
+                    <input asp-for="DueDate" class="DueDateMobile">
+                </div>
+                <label class="DueDatelabel" style="padding-left:15px;">Due Date</label>
+                <span class="dateinc" style="padding-left:15px;"><i class="fa fa-chevron-right fa-1x"></i></span>
+            </div>*@
+        @if (ResponseModel != null && ResponseModel.Payload != null)
+        {
+            <table class="table border-0 mt-3" style="table-layout:fixed;">
+                <tbody>
+                    @foreach (var item in ResponseModel.Payload)
+                    {
+
+                        <tr class='clickable w-100' onclick="window.location='@Url.Action("GetWODetail",new {id=item.Id,type=2})'">
+                            <td style="padding-top:20px;padding-bottom:20px;">
+                                <span style="word-wrap:break-word;font-size:15px">@item.Description</span>
+                            </td>
+                            <td style="padding-right:0px;text-align:end;font-size:14px;color:grey;padding-top:20px;padding-bottom:20px;">@item.ScheduleAt&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <hr />
+            <nav>
+                <ul class="pagination">
+                    @{ int current = 0;}
+                    <li class="page-item @if (ResponseModel.CurrentPage == 0) {<text>disabled</text> }">
+                        @Html.ActionLink("Prev", "Index", "WorkOrder", "", "", "", new { requestedPage = current - 1, matchString = ViewBag.searchstring, status = ViewBag.status, enddate = ViewBag.enddate }, new { @class = "page-link" })
+                    </li>
+
+                    @for (int i = 0; i < ResponseModel.PageCount; i++)
+                    {
+
+                        if (ResponseModel.CurrentPage == i)
+                        {
+                            <li class="page-item active">
+                                <a class="page-link ">@(i + 1) <span class="sr-only">(current)</span></a>
+                            </li>
+                            current = i;
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                @{ Model.PageNumber = i;}
+                                @Html.ActionLink(i + 1 + "", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                            </li>
+                        }
+                    }
+                    @{ Model.PageNumber = current + 1;}
+                    <li class="page-item @if (ResponseModel.CurrentPage + 1 == ResponseModel.PageCount) {<text>disabled</text> }">
+                        @Html.ActionLink("Next", "Index", "WorkOrder", "", "", "", Model, new { @class = "page-link" })
+                    </li>
+                </ul>
+            </nav>
+
+        }
+        else
+        {
+            <span>No Record Found</span>
+
+        }
+    </div>
+</form>
+<hr />
+<div class="bottom-section" style="padding-bottom:@bottom">
+    <div class="bottom-stick" >
+        <a onClick="location.href=location.href" class="nav-link" style="color:#fdfdfdf2;padding-left: 24px"><i class="fa fa-retweet fa-3x" aria-hidden="true"></i></a>
+        <div class="container-block">
+            <a asp-action="CreateWorkOrderRecurringView" class="nav-link float-right" style="color:#fdfdfdf2"><i class="fa fa-plus fa-3x"></i></a>
+        </div>
+    </div>
+    </div>
+    @if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+    {
+        var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+        <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+        </script>
+    }
+    <style>
+        .toggle.btn.btn-xs.btn-info.off {
+            width: 220.125px !important;
+            height: 20.8056px !important;
+        }
+
+        .toggle.btn.btn-xs.btn-warning {
+            width: 220.125px !important;
+            height: 20.8056px !important;
+        }
+    </style>

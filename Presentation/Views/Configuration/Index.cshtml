@@ -1,0 +1,54 @@
+﻿@model List<SelectItem>
+@inject IDeviceResolver device
+@{
+    ViewData["Title"] = "Config Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="workordertitle">
+    Configuration Control
+</div>
+<div class="table_container">
+    <table class="table table-responsive-lg">
+        @if (Model != null)
+        {
+        <tbody>
+            <tr>
+                <td>
+                    <div class="col">
+                        <div class="d-lg-table-row">
+                            <label>Assign Menu To Role</label>
+                        </div>
+                        <div class="d-lg-table-row">
+                            <label>Select Role</label>
+                            <select class="form-control form-control-sm custom-input crole" asp-items="@(new SelectList(Model, "Id", "PropertyName"))">
+                                <option value="">Select Property</option>
+                            </select>
+                        </div>
+                        <hr />
+                        <section>
+                        </section>
+                    </div>
+                </td>
+                <td class="features">
+                    <div class="spinner">
+                        <i class="fa fa-spinner fa-3x fa-spin" aria-hidden="true"></i>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        }
+    </table>
+</div>
+
+<script>
+    $('.crole').change(function (e) {
+        var url = '@Url.Action("FeaturesSelector")';
+        $('.features').html("");
+        var id = $(this).val();
+        RESTCALL(url, { id: id }, "GET", "", true, function (res) {
+            $('.features').html(res);
+            disablespinner();
+        });
+
+    });
+</script>

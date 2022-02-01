@@ -1,0 +1,118 @@
+﻿@model Pagination<List<Comment>>
+@inject IDeviceResolver device
+<div class="mycontainer">
+    <input type="text" id="WorkOrderId" hidden value="@ViewData["workOrderId"]"/>
+    <form asp-action='PostComment' asp-controller="WorkOrder" method='post' id="commentpost1" parent=".commentsection">
+        @if (device.Device.Type != DeviceType.Mobile)
+        {
+            <p>
+                <div class="mycon">
+                    <input type="button" value="Add Comment" class="btn btn-outline-primary btn-sm"  id="addcomment">
+                </div>
+            </p>
+        }
+        <div class="commentsection">
+            @if (Model != null && Model.Payload != null)
+            {
+                @foreach (var item in Model.Payload)
+                {
+                    <div class="parent" id=@item.Id>
+                        <div class="mycon">
+                            <div class="card top-buffer comment">
+                                <div class="card-body">
+                                    <p class="text-success">Comment By-&nbsp; @item.CommentBy</p>
+                                    <h6 class="card-subtitle"> @item.CommentDate</h6>
+                                    <p class="card-text">@item.CommentString</p>
+                                    <input type="text"  class="CommentBy" value="@item.CommentBy" hidden/>
+                                    <input type="button" value="Reply" class="btn btn-success btn-sm reply">
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (item.Reply != null)
+                        {
+                            @foreach (var reply in item.Reply)
+                            {
+                                <div class="mycon">
+                                    <div class="card top-buffer comment" style="margin-left:24px">
+                                        <div class="card-body">
+                                            <p class="text-info">RepliedBy By-&nbsp; @reply.RepliedBy</p>
+                                            <h6 class="card-subtitle">@reply.RepliedDate</h6>
+                                            <p class="card-text"><strong>@@@reply.RepliedTo</strong> @reply.ReplyString</p>
+                                            <input type="text"  class="CommentBy" value="@item.CommentBy" hidden />
+                                            <input type="button"  value="Reply" class="btn btn-success btn-sm reply">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        }
+                    </div>
+                }
+                <hr />
+
+            }
+            else
+            {
+                <p>No Comments</p>
+            }
+        </div>
+    </form>
+</div>
+
+<style>
+    .note {
+        height: 70px;
+        width: 100%;
+        display: block;
+        resize: none;
+    }
+
+    p {
+        text-wrap: normal;
+    }
+
+    .comment:hover {
+        box-shadow: 0 10px 20px 0 rgba(0,0,0,0.15);
+        transition-property: box-shadow, -webkit-box-shadow;
+        transition-duration: 0.4s, 0.4s;
+        transition-timing-function: ease, ease;
+        transition-delay: 0s, 0s;
+    }
+</style>
+
+<script type="text/javascript">
+       @if (device.Device.Type != DeviceType.Mobile)
+       { 
+           <text>var value = 0;</text>
+       }
+       else {
+          <text> var value = 1;</text>
+       }
+   
+
+       var currentpage = @Model?.CurrentPage;
+       var pagecount = @Model?.PageCount;
+       var workorderId = '@ViewData["workOrderId"]';
+
+       jQuery(function($) {
+        $('.mycontainer').on('scroll', function () {
+               if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                   if (currentpage < pagecount) {
+                       currentpage++;
+                $.get('@Url.Action("GetComment","WorkOrder")' + '?requestedPage=' + currentpage + '&workorderId=' + workorderId,
+                    function (data) {
+                           if (data != null || data != undefined) {
+                            $('.commentsection').append(data);
+                           }
+                       });
+
+                   }
+
+               }
+           })
+    });
+       function closePopUp() {
+            $('.popup').remove();
+       }
+</script>

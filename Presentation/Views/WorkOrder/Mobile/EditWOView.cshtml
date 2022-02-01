@@ -1,0 +1,280 @@
+﻿@model EditWorkOrder
+@{
+    ViewData["Title"] = "Edit WorkOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var bottom = "0";
+    var height="92%";
+    var context=HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    if (context.Contains("iPhone"))
+    {
+        height = "90%";
+        bottom = "2%";
+    }
+}
+@if (Model != null)
+{
+    <header>
+        <nav class="navbar bg-success mb-3 fixed-top">
+            <div class="d-inline-flex w-100">
+                <a style="color:white" href="javascript:history.back()" class="nav-link"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                <div class="container-block justify-content-center">
+                    <span class="nav-link justify-content-end" style="color:white;font-size:1.5em;">Edit Work Order</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <form class="mform" style="height: @height ;bottom:@bottom" asp-action="EditWO" asp-controller="WorkOrder" id="editwo">
+        <input type="text" id="Referer" name="Referer" hidden value="@ViewBag.Referer" />
+        @if (Model == null)
+        {
+            <p>No Record Found</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <tbody>
+                    <tr></tr>
+                    <tr><th class="text-center">@Model.Id</th></tr>
+                    <tr>
+                        <th>
+                            Location
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row padding">
+                                <input asp-for="PropertyName" class=" form-control " disabled>
+                                <span asp-validation-for="PropertyName" class="text-danger"></span>
+                            </div>
+
+                            @if (Model.Locations != null && Model.Locations.Any())
+                            {
+                                <div class="row top-buffer padding">
+                                    <select class="form-control " asp-for="LocationId" asp-items="@(new SelectList(Model.Locations, "Id", "PropertyName"))">
+                                        <option value="">Location</option>
+                                    </select>
+                                    <span asp-validation-for="LocationId" class="text-danger"></span>
+                                </div>
+
+                            }
+                            @if (Model.SubLocations != null && Model.SubLocations.Any())
+                            {
+                                <div class="row top-buffer padding">
+
+                                    <select class="form-control form-control " asp-for="SubLocationId" asp-items="@(new SelectList(Model.SubLocations, "Id", "PropertyName"))">
+                                        <option value="">Sub Location</option>
+                                    </select>
+                                    <span asp-validation-for="SubLocationId" class="text-danger"></span>
+                                </div>
+
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            What
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            <div class="row padding">
+                                @if (Model.Items != null && Model.Items.Any())
+                                {
+
+                                    <select class="form-control " asp-for="ItemId" asp-items="@(new SelectList(Model.Items, "Id", "PropertyName"))">
+                                        <option value="">Item</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select class="form-control " asp-for="ItemId">
+                                        <option value="">Item</option>
+                                    </select>
+                                }
+                                <span asp-validation-for="ItemId" class="text-danger"></span>
+                            </div>
+
+
+
+                            <div class="row top-buffer padding">
+
+                                <select class="form-control " asp-for="IssueId" asp-items="@(new SelectList(Model.Issues, "Id", "PropertyName"))">
+                                    <option value=""></option>
+                                    <option value="-1">Other</option>
+                                </select>
+                                <span asp-validation-for="IssueId" class="text-danger"></span>
+                            </div>
+
+                            <div class="row top-buffer padding CustomIssueDiv" style="@if (String.IsNullOrEmpty(Model.CustomIssue)) { <text>display:none</text>}">
+                                <textarea class="form-control" placeholder="Write your own issue. Limit to 100 characters." asp-for="CustomIssue"></textarea>
+
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Details
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row padding">
+                                <textarea class="form-control " asp-for="Description" placeholder="additional Details"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="row top-buffer padding">
+                                <select asp-for="Priority" class="form-control ">
+                                    <option value="0">Critical</option>
+                                    <option value="1">High</option>
+                                    <option value="2">Medium</option>
+                                    <option value="3">Low</option>
+                                </select>
+                                <span asp-validation-for="Priority" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    @if (Model.Vendors != null && Model.Vendors.Any())
+                    {
+                        <tr>
+                            <th>
+                                Vendor (Optional)
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row top-buffer padding">
+                                    <select class="form-control " asp-for="VendorId" asp-items="@(new SelectList(Model.Vendors, "Id", "PropertyName"));">
+                                        <option value="">Select Vendor</option>
+                                    </select>
+                                    <span asp-validation-for="VendorId" class="text-danger"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>
+                            Assign To
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row padding">
+                                <select class="form-control " asp-for="Category">
+                                    <option value="">Choose One</option>
+                                    <option value="department">Department</option>
+                                    <option value="user">User</option>
+                                    <option value="anyone">Anyone</option>
+                                </select>
+                                <span asp-validation-for="Category" class="text-danger"></span>
+                            </div>
+                            <div class="row padding top-buffer">
+                                @if (Model.Options != null && Model.Options.Any())
+                                {
+                                    <select class="form-control form-control" asp-for="OptionId">
+                                        <option value="">Select Option</option>
+                                        @foreach (var item in Model.Options)
+                                        {
+                                            if (item.Key == "")
+                                            {
+                                                foreach (var subitem in item.Value)
+                                                {
+                                                    <option value="@subitem.Id">@subitem.PropertyName</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <optgroup label="@item.Key">
+                                                    @foreach (var subitem in item.Value)
+                                                    {
+                                                        <option value="@subitem.Id">@subitem.PropertyName</option>
+                                                    }
+                                                </optgroup>
+
+                                            }
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select class="form-control" asp-for="OptionId">
+                                        <option value="">Select Option</option>
+                                    </select>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            Due Date
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row padding">
+                                <input class="form-control" asp-for="DueDate">
+                                <span asp-validation-for="DueDate" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            Add Files
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @if (Model.FileAvailable != null)
+                            {
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label asp-for="FileAvailable"></label>
+                                    </div>
+                                    @foreach (var item in Model.FileAvailable)
+                                    {
+                                        <div class="col">
+                                            <a href="@item.Value">@item.Key</a>
+                                            <input type="button" class="btn btn-sm btn-danger" onclick="AddItem(event)" name="@item.Value" value="Delete">
+                                        </div>
+                                    }
+                                </div>
+                                <p class="text-danger removed" style="display:none;text-align: center;">Photos are not removed until work order is saved.</p>
+                            }
+                            <input type="text" asp-for="FilesRemoved" hidden>
+                            <div class="row top-buffer">
+                                <div class="col-md-3">
+                                    <label for="File">Attachment</label>
+                                </div>
+                                <div class="col">
+                                    <div class="cont" style="width:100%">
+                                        <label style="width:100%" class="browsebutton">Add Photo</label>
+                                        <input style="width:100%" asp-for="File" accept="image/*,.pdf,.xls,.xlx,.doc,.docx" class="form-control-sm custom-input File" multiple>
+                                    </div>
+                                    <div id="file_selected">
+                                    </div>
+                                    <span class="text-danger">supported formats: .jpg, .jpeg, .png, .pdf, .xls, .xlx, .doc, .docx </span>
+                                    <p class="text-danger">Photos are not removed until work order is saved.</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input asp-for="Id" hidden>
+            <div class="bottom-section" style="padding-bottom:@bottom">
+                <div class="bottom-stick" style="padding:5px;padding:5px;bottom:@bottom">
+                    <button type="submit" data-toggle="modal" style="margin-left: 24%;" data-target=".bd-example-modal-lg" class="btn w-50  btn-success submit">Save Changes</button>
+                    @*passing data to controller*@
+                </div>
+            </div>
+        }
+    </form>
+}
+<script>
+
+   
+</script>

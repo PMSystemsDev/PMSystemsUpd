@@ -1,0 +1,889 @@
+﻿/*login*/
+.login {
+    width: 350px;
+    margin: 0px auto;
+    position: relative;
+    float: none;
+    margin-bottom: 10px;
+    margin-top: 10%;
+    vertical-align: middle;
+    background-color: rgba(0,0,0,0.7);
+}
+
+
+@media screen and (max-width: 400px) {
+    .login {
+        width: 250px;
+    }
+}
+
+.custom_btn {
+    width: 100%;
+    background-color: rgb(230, 69, 69);
+    color: white;
+}
+
+    .custom_btn:hover {
+        background-color: rgba(238, 70, 70, 0.90);
+        animation: ease-in-out;
+        transition-delay: 0.1s;
+        color: white;
+    }
+
+.registerdiv {
+    text-align: center;
+}
+
+.text-danger {
+    font-size: small;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+}
+
+.title {
+    font-size: larger;
+    font-weight: bold;
+    color: white;
+}
+
+.input-group-text {
+    color: rgb(230, 69, 69);
+}
+
+.register {
+    font-size: small;
+    color: rgb(230, 69, 69)
+}
+
+.forgopassword {
+    font-style: italic;
+    font-size: small;
+    color: rgb(230, 69, 69);
+    float: right;
+}
+
+    .register:hover, .forgopassword:hover {
+        color: rgb(230, 69, 69)
+    }
+
+.custom_btn .fa-key {
+    transform: rotate(-135deg);
+}
+
+.input-group-text {
+    background-color: white;
+}
+/*endlogin*/
+/*start todo*/
+.todolist {
+    border: 2px solid rgba(128, 128, 128,0.7);
+}
+
+.custom_nav {
+    width: 100%;
+    padding-left: 5px;
+    height: 30px;
+    background-color: rgb(209,209,209);
+    border-top: 2px outset rgba(128, 128, 128,0.7);
+    border-bottom: 2px inset rgba(128, 128, 128,0.7);
+}
+
+.nav_list li {
+    list-style-type: none;
+    display: inline-block;
+    color: black;
+    padding-left: 5px;
+    font-weight: 500;
+}
+
+.navbar-collapse .nav-item .fa {
+    font-size: 1.5em;
+    color: lightgray;
+}
+
+    .navbar-collapse .nav-item .fa:hover {
+        color: white;
+    }
+
+.avtaar {
+    border-radius: 50%;
+}
+
+.addnewbutton {
+    border: none;
+    width: 150px;
+    height: 40px;
+    border-radius: 2px;
+    background-color: rgb(65, 153, 66);
+    color: white;
+}
+
+    .addnewbutton:active {
+        background-color: rgba(65, 153, 66,0.8);
+        animation-delay: 0.2s;
+        animation: ease-in-out;
+    }
+
+.filter li {
+    list-style-type: none;
+    display: inline-block;
+    height: 10px;
+    font-size: small;
+}
+
+.filter {
+    margin: 0px !important;
+}
+
+#types {
+    border: none !important;
+    background-color: rgb(242,242,242);
+    box-shadow: none;
+    outline: none !important;
+}
+
+.button {
+    text-align: right;
+}
+
+th {
+    padding: 0px;
+    margin: 0px;
+}
+
+.filterwarp {
+    text-align: right;
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    height: 23px !important;
+}
+
+.date {
+    text-align: center;
+}
+
+.datepicker {
+    border: none;
+    outline: none;
+}
+
+.table {
+    padding: 0px;
+    background-color: white;
+    margin: 0px;
+    border: 3px solid lightgrey;
+}
+
+.mytitle {
+    align-content: center;
+    padding-bottom: 20px !important;
+}
+
+.myview .card {
+    width: 200px;
+    margin: 5px;
+}
+
+.imagethumbnail {
+    border: 1px solid grey;
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.table_container {
+    box-shadow: 0 10px 20px 0 rgba(0,0,0,0.15);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+@media only screen and (max-width:250px) {
+    .custom-input {
+        width: 159px !important;
+    }
+}
+
+@media only screen and (max-width:200px) {
+    .custom-input {
+        width: 127px !important;
+    }
+}
+@media only screen and (max-width: 771px) {
+    .historyview td:nth-of-type(1):before {
+        content: "#"
+    }
+
+    .historyview td:nth-of-type(2):before {
+        content: "Property Name"
+    }
+
+
+    .historyview td:nth-of-type(3):before {
+        content: "Old Value"
+    }
+
+    .historyview td:nth-of-type(4):before {
+        content: "New Value"
+    }
+
+    .historyview td:nth-of-type(5):before {
+        content: "Comment"
+    }
+
+    .historyview td:nth-of-type(6):before {
+        content: "Updated By"
+    }
+
+    .historyview td:nth-of-type(7):before {
+        content: "Update Time"
+    }
+
+    .historyview, .historyview tbody, .historyview td, .historyview tr {
+        display: block;
+    }
+
+        .historyview thead  {
+            display: none;
+        }
+
+        .historyview th {
+            border: none !important;
+            text-align: center;
+        }
+
+        .historyview tbody td {
+            text-wrap: normal !important;
+        }
+
+        .historyview td:before {
+            white-space: nowrap;
+            display: table-cell;
+            color: black;
+            font-weight: bold;
+        }
+    .schedular, .schedular tbody, .schedular th, .schedular td, .schedular tr {
+        display: block;
+    }
+        .schedular thead {
+            display: none;
+        }
+        .schedular th {
+            border: none !important;
+            text-align: center;
+        }
+        .schedular td {
+            text-wrap: normal !important;
+        }
+            .schedular td:before {
+                white-space: nowrap;
+                display: table-cell;
+                color: black;
+                font-weight: bold;
+            }
+}
+
+@media only screen and (max-width: 580px) {
+    .usersview, .notificationview, .wordorderdetail, .dynamicTable, .usersview tbody, .notificationview tbody, .wordorderdetail tbody, .dynamicTable tbody, .usersview th, .notificationview th, .wordorderdetail th, .dynamicTable th, .usersview td, .notificationview td, .wordorderdetail td, .dynamicTable td, .usersview tr, .notificationview tr, .wordorderdetail tr, .dynamicTable tr {
+        display: block;
+    }
+
+        .usersview thead, .wordorderdetail thead, .notificationview thead, .dynamicTable thead{
+            display: none;
+        }
+
+        .usersview th, .wordorderdetail th, .notificationview th, .dynamicTable th {
+            border: none !important;
+            text-align: center;
+        }
+
+    .filterwarp {
+        text-align: inherit;
+    }
+
+    .usersview tbody td, .wordorderdetail tbody td, .notificationview tbody td, .dynamicTable tbody td {
+        text-wrap: normal !important;
+    }
+
+        .usersview td:before, .wordorderdetail td:before, .notificationview td:before, .dynamicTable td:before {
+            white-space: nowrap;
+            display: table-cell;
+            color: black;
+            font-weight: bold;
+        }
+
+        .notificationview td:nth-of-type(1):before {
+            content: "Message"
+        }
+
+        .notificationview td:nth-of-type(2):before {
+            content: "NotificationType"
+        }
+
+        .notificationview td:nth-of-type(3):before {
+            content: "Creation Time"
+        }
+
+    .historyview td:nth-of-type(1):before {
+        content: "#"
+    }
+
+    .historyview td:nth-of-type(2):before {
+        content: "Property Name"
+    }
+
+
+    .historyview td:nth-of-type(3):before {
+        content: "Old Value"
+    }
+
+    .historyview td:nth-of-type(4):before {
+        content: "New Value"
+    }
+
+    .historyview td:nth-of-type(5):before {
+        content: "Comment"
+    }
+
+    .historyview td:nth-of-type(6):before {
+        content: "Updated By"
+    }
+
+    .historyview td:nth-of-type(7):before {
+        content: "Update Time"
+    }
+
+    .usersview td:nth-of-type(1):before {
+        content: "#";
+    }
+
+    .usersview td:nth-of-type(2):before {
+        content: "Full Name";
+    }
+
+    .usersview td:nth-of-type(3):before {
+        content: "UserId (E-mail)";
+    }
+
+    .usersview td:nth-of-type(4):before {
+        content: "Roles";
+    }
+
+    .usersview td:nth-of-type(5):before {
+        content: "Primary Property";
+    }
+
+    
+
+    .wordorderdetail td:nth-of-type(1):before {
+        content: "Work Order Id";
+    }
+
+    .wordorderdetail td:nth-of-type(2):before {
+        content: "Description";
+    }
+
+    .wordorderdetail td:nth-of-type(3):before {
+        content: "Assigned To";
+    }
+
+    .wordorderdetail td:nth-of-type(4):before {
+        content: "Property";
+    }
+
+    .wordorderdetail td:nth-of-type(5):before {
+        content: "Due Date";
+    }
+
+    #search {
+        min-width: 200px;
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .cont {
+        margin-top: 2px;
+    }
+}
+/*end todo*/
+/* work order add*/
+
+.top-buffer {
+    margin-top: 15px;
+}
+
+.workordertitle {
+    display: block;
+    background-color: rgb(65, 153, 66);
+    border-radius: 2px;
+    padding-left: 10px;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.custom-input {
+    border-radius: 0.4em;
+    border: 1.5px solid grey;
+    width: 200px;
+    margin-top: 0px;
+}
+
+label {
+    font-weight: 700;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: grey;
+}
+/*end work order add*/
+/*list properties*/
+.opertion_menu {
+    list-style: none
+}
+
+.opertion_menu_item {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.propery_head {
+    height: 40px;
+    padding-top: 10px;
+    padding-left: 5px;
+}
+
+.propetry {
+    width: 260px;
+}
+/*list properties end*/
+
+/*work order*/
+.nav_list .radios {
+    opacity: 0;
+    position: fixed;
+    width: 0px;
+}
+
+.nav_list li label {
+    background-color: rgb(209,209,209);
+    padding: 2px 2px;
+    font-family: sans-serif, Arial;
+    font-size: 15px;
+    display: inline-block;
+    border: 0px solid #444;
+    border-radius: 0px;
+    cursor: pointer;
+    width: 70px;
+}
+
+.nav_list label {
+    padding: 2px;
+    text-align: center;
+}
+
+    .nav_list label:hover {
+        background-color: rgb(65, 153, 66);
+        color: white;
+    }
+
+.radios:checked + label {
+    background-color: rgb(65, 153, 66);
+    color: white;
+}
+
+.spinner {
+    z-index: 999;
+    position: absolute;
+    display: table-column;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/*work order end*/
+/*multiple select box*/
+.select-mul {
+    height: 100px;
+    position: absolute;
+    z-index: 999;
+    display: none;
+    margin: 0px;
+    -webkit-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+}
+
+.select-input:hover + .select-mul {
+    display: block;
+    height: 25px;
+}
+
+.select-mul:hover {
+    display: block;
+}
+
+/**/
+/*bowse photo*/
+.cont .Photo, .cont .File {
+    opacity: 0;
+    width: 200px;
+    height: 25px;
+}
+
+.cont .browsebutton {
+    position: absolute;
+    width: 200px;
+    height: 25px;
+    background-color: green;
+    color: white;
+    text-align: center;
+    padding-top: 2px;
+}
+
+.photo_disp {
+    display: none;
+    width: 200px;
+    height: 150px;
+}
+
+    .photo_disp:hover {
+        box-shadow: 0 10px 20px 0 rgba(0,0,0,0.15);
+        transition-property: box-shadow, -webkit-box-shadow;
+        transition-duration: 0.4s, 0.4s;
+        transition-timing-function: ease, ease;
+        transition-delay: 0s, 0s;
+    }
+
+.cont .browsebutton:hover {
+    cursor: pointer;
+}
+
+.fa-spin {
+    display: none;
+}
+/**/
+/*propery view*/
+.new_address_css {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-right: 10px;
+    padding-left: 0px;
+    padding-right: 5px;
+}
+
+    .new_address_css .propetry {
+        flex: 1 1 auto;
+        border: 1px blue solid;
+        text-align: center;
+        margin-right: 10px;
+    }
+/**/
+/*getall users*/
+.cont {
+    width: 119px;
+    height: 30px;
+    position: relative;
+    margin-right: 10px;
+}
+
+.selector1, .selector2, .selector3 {
+    width: 100px;
+    height: 30px;
+    position: absolute;
+}
+.selector3 {
+    width: 121px;
+}
+
+.label1, .label2, .label3 {
+    background-color: white;
+    width: 100px;
+    height: 30px;
+    position: absolute;
+    padding: 4px;
+    border-radius: 4px;
+    color: black;
+    font-size: small;
+    border: outset 1px rgba(128, 128, 128,0.4);
+    box-shadow: 1px 1px 1px rgba(128, 128, 128,0.4)
+}
+.label3{
+    width:121px;
+}
+
+.selector1:checked ~ .label1{
+    background-color: rgb(65, 153, 66);
+    color: white;
+}
+
+.selector2:checked ~ .label2 {
+    background-color: rgb(65, 153, 66);
+    color: white;
+}
+.selector3:checked ~ .label3 {
+    background-color: rgb(65, 153, 66);
+    color: white;
+}
+
+.label1:hover, .label2:hover {
+    cursor: pointer;
+}
+/**/
+
+/**/
+
+.multiple-select-box {
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    height: -moz-max-content;
+    min-width: 200px;
+    display: block;
+    border-left: 2px solid grey;
+    border-right: 2px solid grey;
+    border-bottom: 2px solid grey;
+    position: absolute;
+    background-color: white;
+    z-index: 9999;
+    display: none;
+    padding: 5px;
+    border-radius: 5px;
+    overflow-y: auto;
+    max-height: 200px;
+}
+
+.option {
+    display: table-row;
+}
+
+.select-input:hover + .multiple-select-box {
+    display: block;
+}
+
+.multiple-select-box:hover {
+    display: block;
+}
+/*checkbox style*/
+/*Checkboxes styles*/
+
+/**/
+
+.select-input {
+    display: block;
+    min-width: 200px;
+    padding: 0.3em;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    height: calc(1.5em + 0.5rem + 2px)
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px grey;
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 5px;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgb(61, 137, 211);
+        cursor: pointer;
+    }
+
+/*Property css*/
+.new_address_css {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-right: 10px;
+    padding-left: 0px;
+    padding-right: 5px;
+}
+
+    .new_address_css .propetry {
+        flex: 1 1 auto;
+        border: 1px blue solid;
+        text-align: center;
+        margin-right: 10px;
+        margin-top: 10px
+    }
+/**/
+/*work order filter*/
+.filter_check {
+    opacity: 0;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+}
+
+.Filter_con {
+    position: relative;
+    display: block;
+    
+}
+/*mobile*/
+.mform {
+    margin-top: 16%;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+/*workorder detail*/
+.status {
+    display: block;
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+    margin-right: 5px;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.green {
+    background-color: green;
+    color:white;
+}
+
+.bottom-stick {
+    width: 100%;
+    position: relative;
+    padding: 5px;
+    display: inline-flex;
+    background-color: grey;
+}
+.bottom-section {
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    background-color: grey;
+}
+
+.container-block {
+    width: 100%;
+    padding-right: 8px
+}
+
+.pop-up {
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 10000;
+    background-color: rgb(88, 88, 88);
+}
+
+.comment-stick {
+    display: inline-table;
+    width: 100%;
+    position: relative;
+    height: auto;
+    background-color: lightgray;
+}
+
+.comment-grp {
+    position: relative;
+    padding: 4px;
+    margin-bottom: 4px;
+}
+
+.comment-grp-post {
+    position: absolute;
+}
+/**work order  index*/
+.status {
+    display: block;
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+    margin-right: 5px;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.due-date {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.green {
+    background-color: green;
+}
+
+.mobile-input {
+    width: 100%;
+}
+
+
+.mwofilter {
+    width: 75%;
+    z-index: 9999;
+    position: fixed;
+}
+
+.DueDateMobile {
+    width: 30px;
+    position: relative;
+    opacity: 0;
+}
+
+.fa-calendar {
+    position: absolute;
+    padding: 2px;
+}
+
+#DueDate:hover, .fa-chevron-left:hover, .fa-chevron-right, #FilterActive:hover {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    background-color: rgba(128, 128, 128,0.0);
+}
+
+/*wo eidit*/
+.padding {
+    padding: 0 10px 0 10px;
+}
+
+
+.value {
+    display: inline-block;
+    word-break: break-word;
+    padding-top: 0px;
+}
+
+.image-modal {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    top: 0;
+    background: black;
+    display:none;
+}
+.image-modal-close {
+    float: right;
+    cursor: pointer;
+    color: white;
+}
+.image-size {
+    width: 100%;
+    padding: 13px;
+    height:auto;
+    
+}
+
+

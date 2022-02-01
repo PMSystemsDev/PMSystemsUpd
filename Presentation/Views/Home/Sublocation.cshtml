@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Presentation.ViewModels.Controller.Home.SubLocationModel>
+
+    <div class="card">
+
+        <div class="card-body">
+            <h5 class="card-title">Sub Locations</h5>
+            <ul class="pagination" style="flex-wrap:wrap">
+                @foreach (var item in Model)
+            {
+                <li class="page-item">
+                    @if (item.HasPendingWorkder)
+                    {
+                    <button type="button" value="@item.Id" data-toggle="modal" data-target="#wo" class="page-link room  active" style="color:black">@item.SublocationName</button>
+                    }
+                    else
+                    {
+                    <button type="button" value="@item.Id" data-toggle="modal" data-target="#wo" class="page-link room" style="background-color:forestgreen;color:white">@item.SublocationName</button>
+                    }
+                </li>
+            }
+            </ul>
+        </div>
+    </div>
+   
+<script>
+    $(document).ready(function () {
+        $('.room').click(function () {
+
+            enablespiner("Loading...")
+            //retrieve locations
+            $.get('/Home/WorkOrderList?sublocId='+$(this).val(), function (res) {
+                $('.workorders').html(res);
+                disablespinner();
+            })
+
+            
+        });
+    });
+   
+</script>
+    

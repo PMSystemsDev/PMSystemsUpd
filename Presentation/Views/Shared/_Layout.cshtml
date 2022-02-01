@@ -1,0 +1,271 @@
+﻿@{ string userId = "";}
+@inject IDeviceResolver device
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>@ViewData["Title"] - PM</title>
+    <link href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
+    <link rel="manifest" href="~/menifest.json">
+    <link rel="stylesheet" href="~/css/site.min.css?v=1234" />
+    <link rel="stylesheet" href="~/css/fontawesome.min.css?v=1234" />
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/browser-image-compression@1.0.13/dist/browser-image-compression.js"></script>
+    @*<script src="~/js/zooming.min.js"></script>*@
+
+
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <script src="~/js/all.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/sw.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   
+</head>
+<body>
+    @if (device.Device.Type != DeviceType.Mobile)
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm  navbar-dark bg-dark border-bottom  box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="WorkOrder" asp-action="Index">Property Maintenance</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1 justify-content-end" style="grid-gap:7px;">
+
+                            @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+                            {
+                                userId = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Sid).Select(x => x.Value).FirstOrDefault();
+                                var obj = ObjectByteConverter.Deserialize<SessionStore>(await sessionStorage.GetAsync(userId));
+                                var path = HttpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "ImageUrl").Select(x => x.Value).FirstOrDefault();
+                                <li class="nav-item dropdown ">
+                                    <partial name="MenuView" for=@obj.MenuView />
+                                </li>
+                                <li>
+
+                                    <a href="@Url.Action("UserDetailView", "User", new { Id =userId })"><img src='@if (string.IsNullOrEmpty(path)) { <text>/NA.jpg</text>} else { <text>@path.Replace(".jpg",".png")</text> }' width="40" height="40" alt="Pet Image" class="avtaar" /></a>
+
+
+                                </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link text-white"> @HttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) </a>
+                                </li>
+
+                                <li class="nav-item ">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="WorkOrder" asp-action="Index"><i class="fa fa-home fa-1x"></i></a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="GetAllNotification">
+                                        <i class="fa fa-bell fa-1x"></i>
+                                        <span id="notification_count" style="color:red;position:absolute"></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" id="mailid"><i class="fa fa-envelope fa-1x"></i></a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="LogOut"><b><u>Logout</u></b></a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Login" asp-action="Index"><i class="fa fa-sign-in-alt fa-1x"></i></a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <partial name="_CookieConsentPartial" />
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - Property Maintenance - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+    }
+    else if (device.Device.Type == DeviceType.Mobile)
+    {
+        <script>
+            alertify.set('notifier', 'position', 'top-right');
+        </script>
+        <partial name="_CookieConsentPartial" />
+        <main role="main">
+            @RenderBody()
+        </main>
+    }
+
+
+
+
+    <div id="container1" class="image-modal" style="display:none">
+        <div class="close">
+            <i class="fa fa-times" ></i>
+        </div>
+        <div class="zoom">
+            <img class="media" src="" alt="test1">
+        </div>
+    </div>
+    <script src="~/js/directive.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+@if(device.Device.Type != DeviceType.Mobile && HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated){
+<script>
+    $(document).ready(function () {
+        $.get("@Url.Action("GetNotificationCount","Home")", function (data) {
+            if (parseInt(data) > 9) {
+                data="9+"
+            }
+            else {
+                data = parseInt(data);
+            }
+           
+            $("#notification_count").html('<strong>' + data + '</strong>');
+        })
+    });
+    
+   
+</script>
+}
+<script>
+    
+    $(function () {
+        bindZoomImg();
+    });
+  function   bindZoomImg(){
+        $('.zoom-img').on('click', function (e) {
+
+            $('.media').prop('src', $(this).attr('data-original'));
+            $('.image-modal').show();
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        $('.close').on('click', function (e) {
+            $('.media').prop('src', '');
+            $('.image-modal').hide();
+            e.preventDefault();
+        });
+    }
+    
+     alertify.genericDialog || alertify.dialog('genericDialog',function(){
+    return {
+        main:function(content){
+            this.setContent(content);
+        },
+        setup:function(){
+            return {
+                focus:{
+                    element:function(){
+                        return this.elements.body.querySelector(this.get('selector'));
+                    },
+                    select:true
+                },
+                options:{
+                    basic:true,
+                    maximizable:true,
+                    resizable:false,
+                    padding:true
+                }
+            };
+        },
+        settings:{
+            selector:undefined
+        }
+    };
+     });
+    $('#mailid').click(function () {
+        //force focusing password box
+         var opt = '';
+        $.get("@Url.Action("GetUserEmail","Home")", function (data) {
+            console.log(data);
+            for (var i = 0; i < data.length; i++)
+                opt += '<option value="' + data[i].email + '">' + data[i].displayName + '</option>';
+
+            alertify.genericDialog(
+                '<h1>Mail</h1 >' +
+                '<form id="mail" ><div class="form-group">' +
+                '<label>Sent To</label >' +
+                '<select id="User" multiple  class="form-control">' +
+                opt +
+                '</select > ' +
+                '<label>Content</label>' +
+                '<textarea class="form-control">Hello</textarea>' +
+                '<input class="form-control mt-1 w-50" type="file">' +
+                '<input type="submit" class="btn btn-primary mt-1" value="send"></div>' +
+                '<form>');
+           
+        });
+       
+        
+    });
+    $('#mailid').on('submit', function (e) {
+        if (!isValid) {
+            e.preventDefault();    //stop form from submitting
+        }
+    });
+    if (performance.navigation.type == 2) {
+         location.reload(true);
+    }
+</script>
+<style>
+  .close{
+      position:absolute;
+      z-index:1;
+      margin:15px;
+     
+
+
+  }
+  .close:hover{
+     cursor:pointer;
+  }
+  .close:active{
+     color:red;
+  }
+  
+ #container1{ height: 100%; margin: 0 auto 0 auto; max-width: 100%; width: 100%;z-index:10001; }
+#container1 .zoom{ background-color: #DDD; height: 100%; margin: auto; overflow: hidden; width: 100%; }
+#container1 .zoom .media{ bottom: 0; display: block; left: 0; margin: auto; max-height: 100%; max-width: 100%; position: absolute; right: 0; top: 0; 
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d; 
+}
+.transition{
+  transition: -moz-transform ease 200ms;
+  transition: -ms-transform ease 200ms;
+  transition: -o-transform ease 200ms;
+  transition: -webkit-transform ease 200ms;
+  transition: transform ease 200ms;
+}
+.fa-1x {
+        font-size: 1.5em !important;
+    }
+
+
+    </style>
+

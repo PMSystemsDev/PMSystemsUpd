@@ -1,0 +1,159 @@
+﻿@model AssetManagerModel
+@{
+    ViewData["Title"] = "Asset Manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table_container">
+    <div class="workordertitle">
+        Asset Manager
+    </div>
+    <form asp-action="AssetManager" class="addconfig">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="col">
+                            @if (Model.Property != null && Model.Property.Any())
+                            {
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="Locations">Property</label>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control form-control-sm custom-input" asp-for="PropertyId" asp-items="@(new SelectList(Model.Property, "Id", "PropertyName"))">
+                                            <option value="">Select Property</option>
+                                        </select>
+                                        <span asp-validation-for="PropertyId" class="text-danger"></span>
+
+
+                                    </div>
+
+                                </div>
+                            }
+                            
+                                <div class="row top-buffer">
+                                    <div class="col-md-3">
+                                        <label for="Locations">Location</label>
+                                    </div>
+                                    <div class="col">
+                                       
+                                        <select id="LocationId" name="LocationId" class="form-control form-control-sm custom-input ">
+                                            <option value="">Select Location</option>
+                                        </select>
+                                        
+                                        <span asp-validation-for="LocationId" class="text-danger"></span>
+
+
+                                    </div>
+
+                                </div>
+                            
+                        </div>
+
+                    </td>
+                 </tr>
+                <tr>
+                    <td>
+
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-md-3">
+                                </div><div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" onclick="ShowNewAsset();" type="checkbox" value="true" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            New Asset
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                          
+                                <div class="row top-buffer" id="available-asset">
+                                    <div class="col-md-3">
+                                        <label for="Locations">Asset Available</label>
+                                    </div>
+                                    <div class="col">
+                                        <select id="ItemId" name="ItemId" class="form-control form-control-sm custom-input itemId"><option value="">Select Asset</option>
+                                        </select>
+                                        <span asp-validation-for="ItemId" class="text-danger"></span>
+                                        <div><input type="button" class="btm btn-sm btn-danger mt-1" value="Delete" onclick="deleteAsset()"></div>
+
+                                    </div>
+
+                                </div>
+                           
+                            <div class="row top-buffer" id="new-asset" style="display:none;">
+                                <div class="col-md-3">
+                                    <label for="NewAsset">New Asset</label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="NewAsset" class="form-control form-control-sm custom-input">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <label asp-for="Issues"></label>
+                                </div>
+                                <div class="col">
+                                    <textarea asp-for="Issues" rows="8" cols="8" class="form-control form-control-sm custom-input"></textarea>
+                                    <span class="text-danger">Enter issues separated by a comma.</span><br />
+                                                                                                       <span class="text-info">Issues will come prepopulated if available to corresponding location</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        
+                        <input class="btn btn-sm btn-primary" type="submit" value="submit">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<div>
+    <a href="javascript:history.back()">Back</a>
+</div>
+<script>
+    $('.itemId').change(function (e) {
+        enablespiner("Loading...");
+          $.get('@Url.Action("GetIssue","WorkOrder")' + "?id=" + $(this).val(),
+                function (data) {
+                    if (data != null || data != undefined) {
+                        var str = "";
+                      for (var i = 0; i < data.length; i++)
+        {
+                          str = str == "" ? str +data[i].propertyName:str+","+data[i].propertyName;
+        }
+                        $("#Issues").val(str);
+                        disablespinner();
+                    }
+                });
+    })
+    $("#Issues").change(function (e) {
+        if ($(this).val().indexOf(',') == $(this).val().length - 1) {
+            alert("Please remove ',' from the end of the Sub-Locations");
+            $("input[type='submit']").prop("disabled", true);
+        }
+        else {
+            $("input[type='submit']").prop("disabled", false);
+        }
+    })
+</script>
+@if (TempData.ContainsKey("Error") || TempData.ContainsKey("Success"))
+{
+    var key = TempData.ContainsKey("Error") ? "Error" : TempData.ContainsKey("Success") ? "Success" : "Info";
+
+    <script>
+        alertify.alert('@key', '<p>@TempData[key]</p>', function () { });
+    </script>
+}
